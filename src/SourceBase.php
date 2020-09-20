@@ -108,6 +108,8 @@ abstract class SourceBase implements SourceInterface {
                 // Store the delta.
                 if ($updated) {
                     $this->delta[$field] = [$valueOld, $valueNew];
+
+                    break;
                 }
             }
             catch (\Exception $exception) {
