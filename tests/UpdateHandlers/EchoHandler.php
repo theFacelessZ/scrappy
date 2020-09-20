@@ -11,10 +11,11 @@ class EchoHandler extends UpdateHandlerBase {
     {
         $type = get_class($source);
         $storage = json_encode($source->getStorage()->toArray());
+        $delta = json_encode($source->getDelta());
 
-        echo "Detected an update for model $type.";
-        echo "Contents: $storage";
-        echo "\r\n";
+        echo "Detected an update for model $type.\r\n";
+        echo "Contents: $storage\r\n";
+        echo "Delta: $delta\r\n";
     }
 
 }

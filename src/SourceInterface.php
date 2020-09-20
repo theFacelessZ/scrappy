@@ -27,4 +27,12 @@ interface SourceInterface {
      */
     public function getStorage(): StorageInterface;
 
+    /**
+     * Returns delta value set.
+     *
+     * @return array
+     *   A set of previous and current changed values.
+     */
+    public function getDelta(): array;
+
 }

@@ -26,6 +26,13 @@ abstract class SourceBase implements SourceInterface {
     protected $storageCurrent;
 
     /**
+     * A set of delta values.
+     *
+     * @var array
+     */
+    protected $delta = [];
+
+    /**
      * Returns a list of the fields to look up to upon determining the update state.
      *
      * @return string[]
@@ -90,12 +97,18 @@ abstract class SourceBase implements SourceInterface {
         // to be an updated source.
         foreach ($this->getLookupFields() as $field) {
             $parts = explode('::', $field);
+            unset($this->delta[$field]);
 
             try {
                 $valueOld = $this->extractStorageValue($this->storageOutdated, $parts);
                 $valueNew = $this->extractStorageValue($this->storageCurrent, $parts);
 
                 $updated = $valueNew != $valueOld;
+
+                // Store the delta.
+                if ($updated) {
+                    $this->delta[$field] = [$valueOld, $valueNew];
+                }
             }
             catch (\Exception $exception) {
                 // Treat the model as updated model on any exception.
@@ -135,6 +148,14 @@ abstract class SourceBase implements SourceInterface {
     public function getStorage(): StorageInterface
     {
         return $this->storageCurrent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDelta(): array
+    {
+        return $this->delta;
     }
 
 }
