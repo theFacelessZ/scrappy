@@ -9,14 +9,14 @@ class Scrappy {
      *
      * @var SourceInterface[]
      */
-    protected $sources;
+    protected $sources = [];
 
     /**
      * A set of update handlers.
      *
      * @var UpdateHandlerInterface[]
      */
-    protected $handlers;
+    protected $handlers = [];
 
     /**
      * Appends a source to the service.
