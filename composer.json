@@ -1,0 +1,22 @@
+{
+    "name": "a.lupow/scrappy",
+    "authors": [
+        {
+            "name": "Anthony Lupow",
+            "email": "anthony.lupow@gmail.com"
+        }
+    ],
+    "autoload-dev": {
+        "psr-4": {
+            "ScrappyTest\\": "tests/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Scrappy\\": "src/"
+        }
+    },
+    "require": {
+        "paquettg/php-html-parser": "^3.1"
+    }
+}
