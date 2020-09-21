@@ -16,6 +16,14 @@ abstract class StorageBase implements StorageInterface {
         // provided by a caller.
         if (!$comparer) {
             $comparer = function ($a, $b) {
+                // Treat arrays differently.
+                if (is_array($a) && is_array($b)) {
+                    $diff_removed = array_diff($a, $b);
+                    $diff_added = array_diff($b, $a);
+
+                    return !empty($diff_removed) || !empty($diff_added);
+                }
+
                 return $a != $b;
             };
         }
