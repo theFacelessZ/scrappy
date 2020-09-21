@@ -97,4 +97,65 @@ class Scrappy {
         }
     }
 
+    /**
+     * Handles sources in multiprocess fashion.
+     *
+     * @param bool $wait
+     *   When set true will wait for the subprocesses to be closed.
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     */
+    public function updateAllThreaded($wait = true) {
+        $forks = new \SplStack();
+        $sources = new \SplStack();
+
+        foreach ($this->sources as $source) {
+            $sources->push($source);
+        }
+
+        $sources->rewind();
+        while (!$sources->isEmpty()) {
+            // Create a process for each source, which in theory
+            // can introduce an increase in performance.
+            $source = $sources->pop();
+            $pid = pcntl_fork();
+
+            switch ($pid) {
+                case -1:
+                    throw new \Exception('Failed to fork the root process.');
+
+                    break;
+
+                case 0:
+                    // Perform the actual work on a forked process.
+                    $source->fetch();
+                    if ($source->isUpdated()) {
+                        $this->handleUpdate($source);
+                    }
+
+                    die(1);
+
+                default:
+                    // TODO: Implement poolsize restriction to prevent dozens
+                    //  of subprocesses from being spawned.
+                    $forks->push($pid);
+
+                    break;
+            }
+        }
+
+        // Wait for the forks to stop.
+        if ($wait) {
+            $forks->rewind();
+            while (!$forks->isEmpty()) {
+                $status = 0;
+                pcntl_waitpid($forks->pop(), $status);
+            }
+        }
+
+        return $this;
+    }
+
 }
