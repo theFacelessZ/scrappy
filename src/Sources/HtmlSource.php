@@ -55,7 +55,8 @@ abstract class HtmlSource extends SourceBase {
      *
      * @return $this
      */
-    public function setUrl($url) {
+    public function setUrl($url)
+    {
         $this->url = $url;
 
         return $this;
@@ -69,7 +70,8 @@ abstract class HtmlSource extends SourceBase {
      *
      * @return $this
      */
-    public function setClientOptions(array $options = []) {
+    public function setClientOptions(array $options = [])
+    {
         $this->options = $options;
 
         return $this;
@@ -85,7 +87,8 @@ abstract class HtmlSource extends SourceBase {
      * @throws \PHPHtmlParser\Exceptions\LogicalException
      * @throws \PHPHtmlParser\Exceptions\StrictException
      */
-    protected function initialiseParser() {
+    protected function initialiseParser()
+    {
         // Perform source loading first.
         // But before we load the resource, make sure it's not moved.
         $content = $this->client->get($this->url, $this->options)

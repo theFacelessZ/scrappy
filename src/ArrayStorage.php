@@ -41,7 +41,8 @@ class ArrayStorage extends StorageBase {
     /**
      * {@inheritDoc}
      */
-    public function getKeys() {
+    public function getKeys()
+    {
         return array_keys($this->storage);
     }
 

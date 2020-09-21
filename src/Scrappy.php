@@ -26,7 +26,8 @@ class Scrappy {
      *
      * @return $this
      */
-    public function addSource(SourceInterface $source) {
+    public function addSource(SourceInterface $source)
+    {
         $this->sources[] = $source;
 
         return $this;
@@ -40,7 +41,8 @@ class Scrappy {
      *
      * @return $this
      */
-    public function addHandler(UpdateHandlerInterface $handler) {
+    public function addHandler(UpdateHandlerInterface $handler)
+    {
         $this->handlers[] = $handler;
 
         return $this;
@@ -52,7 +54,8 @@ class Scrappy {
      * @param SourceInterface $source
      *   An updated source.
      */
-    protected function handleUpdate(SourceInterface $source) {
+    protected function handleUpdate(SourceInterface $source)
+    {
         foreach ($this->handlers as $handler) {
             if ($handler->appliesTo($source)) {
                 $handler->handle($source);
@@ -65,7 +68,8 @@ class Scrappy {
      *
      * @return $this
      */
-    public function updateAll() {
+    public function updateAll()
+    {
         $iterator = $this->update();
 
         while ($iterator->current()) {
@@ -81,7 +85,8 @@ class Scrappy {
      * @return \Generator
      *   Update items generator.
      */
-    public function update() {
+    public function update()
+    {
         foreach ($this->sources as $source) {
             $source->fetch();
 

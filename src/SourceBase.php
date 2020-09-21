@@ -106,7 +106,8 @@ abstract class SourceBase implements SourceInterface {
     /**
      * {@inheritDoc}
      */
-    public function updateStorage(StorageInterface $storage) {
+    public function updateStorage(StorageInterface $storage)
+    {
         // Set the new storage swapping the current one.
         $storageOld = $this->storageCurrent;
         $this->storageCurrent = $storage;

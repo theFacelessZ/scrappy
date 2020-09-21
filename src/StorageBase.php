@@ -7,7 +7,8 @@ abstract class StorageBase implements StorageInterface {
     /**
      * {@inheritDoc}
      */
-    public function delta(StorageInterface $other, callable $comparer = NULL) {
+    public function delta(StorageInterface $other, callable $comparer = NULL)
+    {
         $keys = $other->getKeys();
         $delta = [];
 

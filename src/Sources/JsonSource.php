@@ -37,7 +37,8 @@ abstract class JsonSource extends SourceBase {
      *
      * @return $this
      */
-    public function setOptions(array $options) {
+    public function setOptions(array $options)
+    {
         $this->options = $options;
 
         return $this;
@@ -58,7 +59,8 @@ abstract class JsonSource extends SourceBase {
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function request($method, $url, array $options = []) {
+    protected function request($method, $url, array $options = [])
+    {
         $response = $this->client->request(
             $method, $url, array_merge($this->options, $options)
         );
