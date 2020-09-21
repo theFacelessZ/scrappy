@@ -12,6 +12,13 @@ for ($i = 0; $i < $sources; $i++) {
     );
 }
 
+$scrappy->addHandler(new \ScrappyTest\UpdateHandlers\EchoConditionedHandler(function (\Scrappy\SourceInterface $source) {
+    $delta = $source->getDelta();
+    $delta = reset($delta);
+
+    return $delta && $delta[1] && ($delta[0] % $delta[1] === 0);
+}));
+
 /**
  * Measures execution time of a given callback.
  *

@@ -78,6 +78,17 @@ abstract class HtmlSource extends SourceBase {
     }
 
     /**
+     * Returns current DOM state.
+     *
+     * @return Dom
+     *   The DOM state.
+     */
+    public function getParser()
+    {
+        return $this->parser;
+    }
+
+    /**
      * Initialises the parser before extracting the information.
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
