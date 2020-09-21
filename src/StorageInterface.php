@@ -27,11 +27,32 @@ interface StorageInterface {
     public function has($field);
 
     /**
+     * Returns a set of storage fields.
+     *
+     * @return string[]
+     *   Keys array.
+     */
+    public function getKeys();
+
+    /**
      * Converts the storage to array.
      *
      * @return array
      *   Array storage representation.
      */
     public function toArray();
+
+    /**
+     * Calculates delta data from the other storage.
+     *
+     * @param \Scrappy\StorageInterface $other
+     *   The other storage.
+     * @param callable $comparer
+     *   Value comparer used for the delta.
+     *
+     * @return array
+     *   Delta data.
+     */
+    public function delta(StorageInterface $other, callable $comparer = NULL);
 
 }

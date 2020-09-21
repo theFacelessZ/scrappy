@@ -2,7 +2,7 @@
 
 namespace Scrappy;
 
-class ArrayStorage implements StorageInterface {
+class ArrayStorage extends StorageBase {
 
     /**
      * Array storage.
@@ -36,6 +36,13 @@ class ArrayStorage implements StorageInterface {
     public function has($field)
     {
         return isset($this->storage[$field]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getKeys() {
+        return array_keys($this->storage);
     }
 
     /**

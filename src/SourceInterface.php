@@ -28,6 +28,16 @@ interface SourceInterface {
     public function getStorage(): StorageInterface;
 
     /**
+     * Updates current storage.
+     *
+     * @param \Scrappy\StorageInterface $storage
+     *   Updated storage.
+     *
+     * @return $this
+     */
+    public function updateStorage(StorageInterface $storage);
+
+    /**
      * Returns delta value set.
      *
      * @return array

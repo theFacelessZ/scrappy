@@ -41,41 +41,6 @@ abstract class SourceBase implements SourceInterface {
     abstract protected function getLookupFields();
 
     /**
-     * Extracts target storage value.
-     *
-     * @param StorageInterface $storage
-     *   Target storage.
-     * @param array $parts
-     *   Field parts.
-     *
-     * @return mixed|StorageInterface
-     *   Storage value.
-     *
-     * @throws \Exception
-     */
-    protected function &extractStorageValue(StorageInterface &$storage, array $parts = []) {
-        $value = &$storage;
-
-        foreach ($parts as $part) {
-            if ($value instanceof StorageInterface) {
-                if (!$value->has($part)) {
-                    throw new \Exception('Missing storage field.');
-                }
-
-                $value = &$value->get($part);
-            }
-            elseif (is_array($value)) {
-                $value = &$value[$part];
-            }
-            else {
-                $value = &$value->{$part};
-            }
-        }
-
-        return $value;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function isUpdated()
@@ -95,26 +60,12 @@ abstract class SourceBase implements SourceInterface {
         // Compare the two storage values.
         // If at least one value is updated, treat the source
         // to be an updated source.
+        $this->delta = $this->storageCurrent->delta($this->storageOutdated);
         foreach ($this->getLookupFields() as $field) {
-            $parts = explode('::', $field);
-            unset($this->delta[$field]);
+            $updated = isset($this->delta[$field]);
 
-            try {
-                $valueOld = $this->extractStorageValue($this->storageOutdated, $parts);
-                $valueNew = $this->extractStorageValue($this->storageCurrent, $parts);
-
-                $updated = $valueNew != $valueOld;
-
-                // Store the delta.
-                if ($updated) {
-                    $this->delta[$field] = [$valueOld, $valueNew];
-
-                    break;
-                }
-            }
-            catch (\Exception $exception) {
-                // Treat the model as updated model on any exception.
-                $updated = true;
+            if ($updated) {
+                break;
             }
         }
 
@@ -134,9 +85,9 @@ abstract class SourceBase implements SourceInterface {
      */
     public function fetch()
     {
-        $storageOld = $this->storageCurrent;
-        $this->storageCurrent = $this->doFetch();
-        $this->storageOutdated = $storageOld;
+        $this->updateStorage(
+            $this->doFetch()
+        );
 
         // Make sure the update flag is invalidated.
         $this->isUpdated = null;
@@ -150,6 +101,18 @@ abstract class SourceBase implements SourceInterface {
     public function getStorage(): StorageInterface
     {
         return $this->storageCurrent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updateStorage(StorageInterface $storage) {
+        // Set the new storage swapping the current one.
+        $storageOld = $this->storageCurrent;
+        $this->storageCurrent = $storage;
+        $this->storageOutdated = $storageOld;
+
+        return $this;
     }
 
     /**
