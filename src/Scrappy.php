@@ -109,17 +109,10 @@ class Scrappy {
      */
     public function updateAllThreaded($wait = true) {
         $forks = new \SplStack();
-        $sources = new \SplStack();
 
         foreach ($this->sources as $source) {
-            $sources->push($source);
-        }
-
-        $sources->rewind();
-        while (!$sources->isEmpty()) {
             // Create a process for each source, which in theory
             // can introduce an increase in performance.
-            $source = $sources->pop();
             $pid = pcntl_fork();
 
             switch ($pid) {
